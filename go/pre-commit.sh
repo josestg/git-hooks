@@ -7,6 +7,7 @@ IMPORTS='[GO IMPORTS]'
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+PURPLE='\033[0;35m'
 NC='\033[0m'
 
 
@@ -15,7 +16,8 @@ NC='\033[0m'
 STAGED_GO_FILES=$(git diff --cached --name-only -- '*.go')
 
 if [[ $STAGED_GO_FILES == "" ]]; then
-    printf "No go files changed"
+    # shellcheck disable=SC2059
+    printf "${PURPLE} No go files changed ${NC}\n"
 else
   for file in $STAGED_GO_FILES; do
     ## Runs go fmt
@@ -42,7 +44,6 @@ fi
 git diff --exit-code go.* &> /dev/null
 
 if [ $? -eq 1 ]; then
-    echo "go.mod or go.sum differs, please re-add it to your commit"
-
+    printf "go.mod or go.sum differs, please re-add it to your commit\n"
     exit 1
 fi
